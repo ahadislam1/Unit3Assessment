@@ -21,4 +21,5 @@ enum AppError: Error {
     case networkClientError(Error)
     case decodingError(Error)
     case encodingError(Error)
+    case imageDecodingError
 }

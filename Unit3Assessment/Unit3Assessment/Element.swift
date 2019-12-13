@@ -16,4 +16,9 @@ struct Element: Codable {
     let melt: Double?
     let boil: Double?
     let discovered_by: String?
+    
+    var elementNumberInString: String {
+        return number / 100 == 0 ?
+            (number / 10 == 0 ? "00\(number)" : "0\(number)") : "\(number)"
+    }
 }

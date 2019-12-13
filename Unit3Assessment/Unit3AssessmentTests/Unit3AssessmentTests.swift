@@ -24,6 +24,8 @@ class Unit3AssessmentTests: XCTestCase {
             case .success(let elementsFromAPI):
                 elements = elementsFromAPI
                 XCTAssertEqual(elements[0].name, name)
+                XCTAssertEqual(elements[98].elementNumberInString, "099", "Was expecting something lol.")
+                XCTAssertEqual(elements[9].elementNumberInString, "010")
                 exp.fulfill()
             }
         }
@@ -31,5 +33,18 @@ class Unit3AssessmentTests: XCTestCase {
         wait(for: [exp], timeout: 20.0)
     }
     
+    func testStupidNumber() {
+        let string1 = "000"
+        let number = 0
+        let string2 = "00\(number)"
+        
+        XCTAssertEqual(string1, string2)
+        
+        let string3 = "001"
+        let number2 = 1
+        let string4 = "00\(number2)"
+        
+        XCTAssertEqual(string3, string4)
+    }
 
 }
