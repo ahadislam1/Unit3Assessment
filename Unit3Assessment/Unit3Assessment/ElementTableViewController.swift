@@ -28,6 +28,12 @@ class ElementTableViewController: UIViewController {
         configureTableView()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destVC = segue.destination as? ElementDetailViewController {
+            
+        }
+    }
+    
     private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -66,7 +72,7 @@ extension ElementTableViewController: UITableViewDataSource {
         let thumbnailURL =         "https://www.theodoregray.com/periodictable/Tiles/\(element.elementNumberInString)/s7.JPG"
 
         cell.nameLabel.text = element.name
-        cell.infoLabel.text = "\(element.symbol)(\(element.name)) \(element.atomic_mass)"
+        cell.infoLabel.text = "\(element.symbol)(\(element.name)) \(element.atomicMass)"
         cell.elementImageView.getImage(with: thumbnailURL) { (result) in
             switch result {
             case .failure(let error):
