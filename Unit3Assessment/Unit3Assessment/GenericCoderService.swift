@@ -57,22 +57,17 @@ class GenericCoderService {
         }
     }
     
-    func deleteJSON<T: Encodable>(object: T, with urlString: String, completionHandler: @escaping (Result<Data, AppError>) -> ()) {
-        
-        guard let encodedObject = try? JSONEncoder().encode(object) else {
-            completionHandler(.failure(.invalidJSONResponse))
-            return
-        }
+    func deleteJSON(with urlString: String, completionHandler: @escaping (Result<Data, AppError>) -> ()) {
         
         guard let url = URL(string: urlString) else {
             completionHandler(.failure(.badURL))
             return
         }
         
-        NetworkHelper.manager.performDataTask(withUrl: url, andHTTPBody: encodedObject, andMethod: .delete) { (result) in
+        NetworkHelper.manager.performDataTask(withUrl: url, andMethod: .delete) { (result) in
             switch result {
             case .failure(let error):
-                completionHandler(.failure(.encodingError(error)))
+                completionHandler(.failure(.networkClientError(error)))
             case .success(let data):
                 completionHandler(.success(data))
             }

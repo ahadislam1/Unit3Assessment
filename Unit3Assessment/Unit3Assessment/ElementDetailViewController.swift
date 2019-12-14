@@ -19,11 +19,27 @@ class ElementDetailViewController: UIViewController {
     @IBOutlet weak var discoveryLabel: UILabel!
     @IBOutlet weak var barButton: UIBarButtonItem!
     
-    weak var delegate: FavoriteElementDelegate?
-    
     var element: Element!
     
-    var favoriteElements = Set<String>()
+    private let name = "Ahad"
+    
+    private let endpointURL = "https://5df40792f9e7ae0014801788.mockapi.io/api/v1/favorites"
+    
+    private var favorites = [Favorite]() {
+        didSet {
+            if isFavorited {
+                barButton.style = .done
+                barButton.image = UIImage(systemName: "hand.thumbsup.fill")
+            } else {
+                barButton.style = .plain
+                barButton.image = UIImage(systemName: "hand.thumbsup")
+            }
+        }
+    }
+    
+    private var isFavorited: Bool {
+        favorites.map{$0.elementName}.contains(element.name)
+    }
     
     private var imageURL: String {
         "https://images-of-elements.com/\(element.name.lowercased()).jpg"
@@ -32,6 +48,7 @@ class ElementDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("viewDidLoad")
+        loadData()
         configureView()
     }
     
@@ -53,13 +70,16 @@ class ElementDetailViewController: UIViewController {
                 }
             }
         }
-        
-        if favoriteElements.contains(element.name) {
-            barButton.style = .done
-            barButton.image = UIImage(systemName: "hand.thumbsup.fill")
-        } else {
-            barButton.style = .plain
-            barButton.image = UIImage(systemName: "hand.thumbsup")
+    }
+    
+    private func loadData() {
+        GenericCoderService.manager.getJSON(objectType: [Favorite].self, with: endpointURL) { (result) in
+            switch result {
+            case .failure(let error):
+                print("Error getting JSON: \(error)")
+            case .success(let favoritesFromAPI):
+                self.favorites = favoritesFromAPI.filter({$0.favoritedBy == self.name})
+            }
         }
     }
     
@@ -68,24 +88,49 @@ class ElementDetailViewController: UIViewController {
     @IBAction func barButtonPressed(_ sender: UIBarButtonItem) {
         switch sender.style {
         case .done:
-            sender.style = .plain
-            sender.image = UIImage(systemName: "hand.thumbsup")
-            if favoriteElements.contains(element.name) {
-                favoriteElements.remove(element.name)
+            sender.isEnabled = false
+            if isFavorited {
+                let favorite = favorites.first { $0.elementName == element.name }
+                if let favorite = favorite, let id = favorite.id {
+                    GenericCoderService.manager.deleteJSON(with: endpointURL + "/\(id)") { (result) in
+                        switch result {
+                        case .failure(let error):
+                            print("Error deleting JSON: \(error)")
+                        case .success:
+                            DispatchQueue.main.async {
+                                sender.isEnabled = true
+                                sender.style = .plain
+                                sender.image = UIImage(systemName: "hand.thumbsup")
+                            }
+                        }
+                    }
+                }
             }
+            
         case .plain:
-            sender.style = .done
-            sender.image = UIImage(systemName: "hand.thumbsup.fill")
-            if !favoriteElements.contains(element.name) {
-                favoriteElements.update(with: element.name)
-            } else {
-                favoriteElements.update(with: element.name)
+            sender.isEnabled = false
+            let favorite = Favorite(favoritedBy: name, elementName: element.name, elementSymbol: element.symbol)
+            GenericCoderService.manager.postJSON(object: favorite, with: endpointURL) { (result) in
+                switch result {
+                case .failure(let error):
+                    print("Error posting JSON: \(error)")
+                    DispatchQueue.main.async {
+                        sender.isEnabled = true
+                        sender.style = .done
+                        sender.image = UIImage(systemName: "hand.thumbsup.fill")
+                    }
+                case .success:
+                    self.loadData()
+                    DispatchQueue.main.async {
+                        sender.isEnabled = true
+                        sender.style = .done
+                        sender.image = UIImage(systemName: "hand.thumbsup.fill")
+                    }
+                }
             }
         default:
             break
         }
-        delegate?.favoriteElements(favoriteElements)
-        print(favoriteElements)
     }
     
     /*

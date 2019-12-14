@@ -94,7 +94,58 @@ class Unit3AssessmentTests: XCTestCase {
         let postURL = "https://5df40792f9e7ae0014801788.mockapi.io/api/v1/favorites"
         let favorite = Favorite(favoritedBy: "Ahad", elementName: "Hydrogen", elementSymbol: "H")
         let exp = XCTestExpectation(description: "Successfully posted project.")
-        GenericCoderService.manager.po
+        GenericCoderService.manager.postJSON(object: favorite, with: postURL) { (result) in
+            switch result {
+            case .failure(let error):
+                debugPrint(error)
+            case .success:
+                exp.fulfill()
+            }
+        }
+        
+        wait(for: [exp], timeout: 20)
+    }
+    
+    func testDeleteJSON() {
+        let deleteURL = "https://5df40792f9e7ae0014801788.mockapi.io/api/v1/favorites/1"
+        let exp = XCTestExpectation(description: "Succesffuly deleted project")
+        GenericCoderService.manager.deleteJSON(with: deleteURL) { (result) in
+            switch result {
+            case .failure(let error):
+                debugPrint(error)
+            case .success:
+                exp.fulfill()
+            }
+        }
+        wait(for: [exp], timeout: 20)
+    }
+    
+    func testActualGetJSON() {
+        let getURL = "https://5df40792f9e7ae0014801788.mockapi.io/api/v1/favorites"
+        let userID = 1
+        let exp = XCTestExpectation(description: "Succesfully got project.")
+        var favorites = [Favorite]()
+        GenericCoderService.manager.getJSON(objectType: [Favorite].self, with: getURL) { (result) in
+            switch result {
+            case .failure(let error):
+                debugPrint(error)
+            case .success(let favoritesFromAPI):
+                favorites = favoritesFromAPI
+                print(favorites.count)
+                print(favorites[0].id)
+                XCTAssertNotNil(favorites[0].id, "REAL Assertion that i should be doing.")
+                exp.fulfill()
+            }
+        }
+        wait(for: [exp], timeout: 20)
+
+    }
+    
+    func testStupidString() {
+        let endURL = "https://5df40792f9e7ae0014801788.mockapi.io/api/v1/favorites"
+        let expURL = "https://5df40792f9e7ae0014801788.mockapi.io/api/v1/favorites/1"
+        let dumbURL = endURL + "/1"
+        XCTAssertEqual(expURL, dumbURL)
     }
 
 }
