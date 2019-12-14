@@ -1,84 +1,93 @@
 //
-//  ViewController.swift
+//  FavoritesTableViewController.swift
 //  Unit3Assessment
 //
-//  Created by Ahad Islam on 12/12/19.
+//  Created by Ahad Islam on 12/13/19.
 //  Copyright © 2019 Ahad Islam. All rights reserved.
 //
 
 import UIKit
 
-
-class ElementTableViewController: UIViewController {
-
+class FavoritesTableViewController: UIViewController {
+    
     @IBOutlet weak var tableView: UITableView!
     
-    private var elements = [Element]() {
-        didSet{
+    private let elementsURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/elements"
+    private let favoritesURL = "https://5df40792f9e7ae0014801788.mockapi.io/api/v1/favorites"
+    
+    var elements = [Element]()
+    var favorites = [Favorite]() {
+        didSet {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
         }
     }
     
-    var favoriteElements = Set<String>()
-    
-    private let endpointURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/elements"
+    var filteredElements: [Element] {
+        let favoriteElements = favorites.map {$0.elementName }
+        return elements.filter { favoriteElements.contains($0.name)}
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadData()
-        configureTableView()
+        configureView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("ViewWillAppear")
-        print(favoriteElements)
+        loadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destVC = segue.destination as? ElementDetailViewController {
-            destVC.element = elements[tableView.indexPathForSelectedRow!.row]
-            destVC.title = elements[tableView.indexPathForSelectedRow!.row].name
+            destVC.element = filteredElements[tableView.indexPathForSelectedRow!.row]
+            destVC.title = filteredElements[tableView.indexPathForSelectedRow!.row].name
         }
     }
     
-    private func configureTableView() {
+    private func configureView() {
         tableView.delegate = self
         tableView.dataSource = self
     }
     
     private func loadData() {
-        GenericCoderService.manager.getJSON(objectType: [Element].self, with: endpointURL) { result in
+        GenericCoderService.manager.getJSON(objectType: [Element].self, with: elementsURL) { (result) in
             switch result {
             case .failure(let error):
-                print("Error decoding: \(error)")
+                print("Error occurred getting JSON: \(error)")
             case .success(let elementsFromAPI):
                 self.elements = elementsFromAPI
             }
         }
+        GenericCoderService.manager.getJSON(objectType: [Favorite].self, with: favoritesURL) { (result) in
+            switch result {
+            case .failure(let error):
+                print("Error occurred getting JSON: \(error)")
+            case .success(let favoritesFromAPI):
+                self.favorites = favoritesFromAPI
+            }
+        }
     }
-    
 }
 
-extension ElementTableViewController: UITableViewDelegate {}
-extension ElementTableViewController: UITableViewDataSource {
+extension FavoritesTableViewController: UITableViewDelegate {}
+extension FavoritesTableViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 250
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return elements.count
+        return filteredElements.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "Element Cell", for: indexPath) as? ElementCell else {
-            print("Error creating cell as element cell.")
+            print("Cell could not be made using identifier")
             return UITableViewCell()
         }
-        let element = elements[indexPath.row]
+        let element = filteredElements[indexPath.row]
         let thumbnailURL = "https://www.theodoregray.com/periodictable/Tiles/\(element.elementNumberInString)/s7.JPG"
 
         cell.nameLabel.text = element.name

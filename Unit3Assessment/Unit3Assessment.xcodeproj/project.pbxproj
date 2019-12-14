@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E11EF11D23A477C4005132B0 /* FavoritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EF11C23A477C3005132B0 /* FavoritesTableViewController.swift */; };
 		E1E3968523A31AF600F0613D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E3968423A31AF600F0613D /* AppDelegate.swift */; };
 		E1E3968723A31AF600F0613D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E3968623A31AF600F0613D /* SceneDelegate.swift */; };
 		E1E3968923A31AF600F0613D /* ElementTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E3968823A31AF600F0613D /* ElementTableViewController.swift */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E11EF11C23A477C3005132B0 /* FavoritesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewController.swift; sourceTree = "<group>"; };
 		E1E3968123A31AF600F0613D /* Unit3Assessment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Unit3Assessment.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1E3968423A31AF600F0613D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E1E3968623A31AF600F0613D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				E1E396AE23A32DA400F0613D /* ElementCell.swift */,
 				E1E3968823A31AF600F0613D /* ElementTableViewController.swift */,
 				E1E396B223A339DA00F0613D /* ElementDetailViewController.swift */,
+				E11EF11C23A477C3005132B0 /* FavoritesTableViewController.swift */,
 				E1E396B023A3342600F0613D /* ImageView+Extensions.swift */,
 				E1E3968A23A31AF600F0613D /* Main.storyboard */,
 				E1E3968D23A31AF900F0613D /* Assets.xcassets */,
@@ -227,6 +230,7 @@
 				E1E396A723A31B2500F0613D /* NetworkHelper.swift in Sources */,
 				E1E396B123A3342600F0613D /* ImageView+Extensions.swift in Sources */,
 				E1E3968923A31AF600F0613D /* ElementTableViewController.swift in Sources */,
+				E11EF11D23A477C4005132B0 /* FavoritesTableViewController.swift in Sources */,
 				E1E396A923A31B4500F0613D /* AppError.swift in Sources */,
 				E1E396AD23A323EB00F0613D /* GenericCoderService.swift in Sources */,
 				E1E3968523A31AF600F0613D /* AppDelegate.swift in Sources */,
