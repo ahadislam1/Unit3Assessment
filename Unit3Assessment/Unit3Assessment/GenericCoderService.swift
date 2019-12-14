@@ -38,7 +38,7 @@ class GenericCoderService {
         
         guard let encodedObject = try? JSONEncoder().encode(object) else {
             completionHandler(.failure(.invalidJSONResponse))
-            fatalError("Could not encode JSON object.")
+            return
         }
         
         guard let url = URL(string: urlString) else {
@@ -48,6 +48,28 @@ class GenericCoderService {
         
         NetworkHelper.manager.performDataTask(withUrl: url, andHTTPBody: encodedObject, andMethod: .post) { result in
             
+            switch result {
+            case .failure(let error):
+                completionHandler(.failure(.encodingError(error)))
+            case .success(let data):
+                completionHandler(.success(data))
+            }
+        }
+    }
+    
+    func deleteJSON<T: Encodable>(object: T, with urlString: String, completionHandler: @escaping (Result<Data, AppError>) -> ()) {
+        
+        guard let encodedObject = try? JSONEncoder().encode(object) else {
+            completionHandler(.failure(.invalidJSONResponse))
+            return
+        }
+        
+        guard let url = URL(string: urlString) else {
+            completionHandler(.failure(.badURL))
+            return
+        }
+        
+        NetworkHelper.manager.performDataTask(withUrl: url, andHTTPBody: encodedObject, andMethod: .delete) { (result) in
             switch result {
             case .failure(let error):
                 completionHandler(.failure(.encodingError(error)))

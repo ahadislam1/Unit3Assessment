@@ -10,6 +10,7 @@ import Foundation
 enum HTTPMethod: String {
     case get = "GET"
     case post = "POST"
+    case delete = "DELETE"
 }
 
 class NetworkHelper {
@@ -36,9 +37,16 @@ class NetworkHelper {
                     return
                 }
 
-                guard let response = response as? HTTPURLResponse, (200...299) ~= response.statusCode else {
-                    completionHandler(.failure(.badStatusCode))
+                guard let response = response as? HTTPURLResponse else {
+                    completionHandler(.failure(.noResponse))
                     return
+                }
+                
+                switch response.statusCode {
+                case 200...299: break // everything went well here
+                default:
+                  completionHandler(.failure(.badStatusCode(response.statusCode)))
+                  return
                 }
 
                 if let error = error {

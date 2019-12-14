@@ -46,5 +46,55 @@ class Unit3AssessmentTests: XCTestCase {
         
         XCTAssertEqual(string3, string4)
     }
+    
+    func testFavoriteJSON() {
+        let getURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites"
+        let id = "Carbon"
+        let exp = XCTestExpectation(description: "JSON decoded successfully")
+        var favorites = [Favorite]()
+        
+        GenericCoderService.manager.getJSON(objectType: [Favorite].self, with: getURL) { (result) in
+            switch result {
+            case .failure(let error):
+                XCTFail("Error occured getting JSON: \(error)")
+            case .success(let favoritesFromAPI):
+                favorites = favoritesFromAPI
+                XCTAssertEqual(id, favorites[0].elementName, "it all went wrong")
+                exp.fulfill()
+            }
+        }
+        wait(for: [exp], timeout: 20.0)
+    }
+    
+    func testPostJSON() {
+        let postURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites"
+        let favorite = Favorite(favoritedBy: "ahad", elementName: "Hydrogen", elementSymbol: "H")
+        let exp = XCTestExpectation(description: "Successfully encoded project")
+        GenericCoderService.manager.postJSON(object: favorite, with: postURL) { (result) in
+            switch result {
+            case .failure(let error):
+                print("Error occured during encoding: \(error)")
+            case .success:
+                exp.fulfill()
+            }
+        }
+        
+        wait(for: [exp], timeout: 20)
+    }
+    
+    func testReduce() {
+        let stupidArray = [1,2,3,5,6]
+        let highestNum = 6
+        let stupidArrayHighestNumber = stupidArray.reduce(Int.min, { $0 > $1 ? $0 : $1 } )
+        
+        XCTAssertEqual(highestNum, stupidArrayHighestNumber)
+    }
+    
+    func testAnActualPostJSON() {
+        let postURL = "https://5df40792f9e7ae0014801788.mockapi.io/api/v1/favorites"
+        let favorite = Favorite(favoritedBy: "Ahad", elementName: "Hydrogen", elementSymbol: "H")
+        let exp = XCTestExpectation(description: "Successfully posted project.")
+        GenericCoderService.manager.po
+    }
 
 }

@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol FavoriteElementDelegate: AnyObject {
+    func favoriteElements(_ set: Set<String>)
+}
+
 class ElementTableViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
@@ -20,6 +24,8 @@ class ElementTableViewController: UIViewController {
         }
     }
     
+    var favoriteElements = Set<String>()
+    
     private let endpointURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/elements"
     
     override func viewDidLoad() {
@@ -28,9 +34,30 @@ class ElementTableViewController: UIViewController {
         configureTableView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("ViewWillAppear")
+        print(favoriteElements)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destVC = segue.destination as? ElementDetailViewController {
-            
+            destVC.element = elements[tableView.indexPathForSelectedRow!.row]
+            destVC.title = elements[tableView.indexPathForSelectedRow!.row].name
+            destVC.favoriteElements = favoriteElements
+            destVC.delegate = self
+        }
+    }
+    
+//    override func unwind(for unwindSegue: UIStoryboardSegue, towards subsequentVC: UIViewController) {
+//        if let unwindVC = unwindSegue.source as? ElementDetailViewController {
+//            favoriteElements = unwindVC.favoriteElements
+//        }
+//    }
+    
+    @IBAction func save(_ unwindSegue: UIStoryboardSegue) {
+        if let elementDetailVC = unwindSegue.source as? ElementDetailViewController {
+            favoriteElements = elementDetailVC.favoriteElements
         }
     }
     
@@ -84,5 +111,11 @@ extension ElementTableViewController: UITableViewDataSource {
             }
         }
         return cell
+    }
+}
+
+extension ElementTableViewController: FavoriteElementDelegate {
+    func favoriteElements(_ set: Set<String>) {
+        self.favoriteElements = set
     }
 }

@@ -59,7 +59,7 @@
                                             <outlet property="elementImageView" destination="k0h-T8-G4Y" id="I2h-uf-Gh8"/>
                                             <outlet property="infoLabel" destination="FfU-zm-N5T" id="Jmg-Cg-Nvh"/>
                                             <outlet property="nameLabel" destination="cAq-gN-RXJ" id="Abe-gS-EVd"/>
-                                            <segue destination="vkc-DF-Qcf" kind="show" id="WbP-2h-fPt"/>
+                                            <segue destination="vkc-DF-Qcf" kind="show" id="fqn-n4-jnl"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -113,7 +113,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YGD-M3-cPt">
-                                <rect key="frame" x="20" y="703" width="42" height="21"/>
+                                <rect key="frame" x="20" y="703" width="167" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -130,12 +130,17 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wf9-OQ-mdW">
+                                <rect key="frame" x="123" y="782" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="VA4-6C-FS9" firstAttribute="top" secondItem="jGQ-tt-1pp" secondAttribute="top" constant="20" id="0Aw-jL-Kcg"/>
                             <constraint firstItem="YGD-M3-cPt" firstAttribute="leading" secondItem="jGQ-tt-1pp" secondAttribute="leading" constant="20" id="49M-0A-Ekx"/>
-                            <constraint firstItem="jGQ-tt-1pp" firstAttribute="centerX" secondItem="YGD-M3-cPt" secondAttribute="trailing" constant="145" id="6q4-XP-ZOg"/>
+                            <constraint firstItem="jGQ-tt-1pp" firstAttribute="centerX" secondItem="YGD-M3-cPt" secondAttribute="trailing" constant="20" id="6q4-XP-ZOg"/>
                             <constraint firstItem="jGQ-tt-1pp" firstAttribute="trailing" secondItem="lMq-XW-Fcy" secondAttribute="trailing" constant="20" id="7dt-eJ-QeZ"/>
                             <constraint firstItem="OuO-OU-IhO" firstAttribute="leading" secondItem="jGQ-tt-1pp" secondAttribute="leading" constant="20" id="JOo-xE-OPg"/>
                             <constraint firstItem="YNo-bT-umF" firstAttribute="leading" secondItem="jGQ-tt-1pp" secondAttribute="centerX" id="KKR-do-QTW"/>
@@ -147,7 +152,6 @@
                             <constraint firstItem="tYs-Gh-Jfo" firstAttribute="top" secondItem="VA4-6C-FS9" secondAttribute="bottom" constant="20" id="d8W-aS-K11"/>
                             <constraint firstItem="jGQ-tt-1pp" firstAttribute="centerY" secondItem="VA4-6C-FS9" secondAttribute="bottom" multiplier="0.9" id="eQl-np-9nb"/>
                             <constraint firstItem="jGQ-tt-1pp" firstAttribute="trailing" secondItem="VA4-6C-FS9" secondAttribute="trailing" constant="20" id="feL-DN-Y54"/>
-                            <constraint firstItem="lMq-XW-Fcy" firstAttribute="centerX" secondItem="haM-wi-bQz" secondAttribute="centerX" id="h0F-qJ-Ep7"/>
                             <constraint firstItem="jGQ-tt-1pp" firstAttribute="centerX" secondItem="tYs-Gh-Jfo" secondAttribute="trailing" id="hUf-LA-mbR"/>
                             <constraint firstItem="lMq-XW-Fcy" firstAttribute="centerY" secondItem="haM-wi-bQz" secondAttribute="centerY" multiplier="1.4" id="k5t-2D-1bK"/>
                             <constraint firstItem="OuO-OU-IhO" firstAttribute="top" secondItem="lMq-XW-Fcy" secondAttribute="bottom" constant="20" id="kwA-b0-1Le"/>
@@ -159,9 +163,17 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jGQ-tt-1pp"/>
                     </view>
-                    <navigationItem key="navigationItem" id="GPi-ZV-Rtt"/>
+                    <navigationItem key="navigationItem" id="GPi-ZV-Rtt">
+                        <barButtonItem key="rightBarButtonItem" image="hand.thumbsup" catalog="system" id="zil-gd-SPA">
+                            <connections>
+                                <action selector="barButtonPressed:" destination="vkc-DF-Qcf" id="jOn-Yq-MPP"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="barButton" destination="zil-gd-SPA" id="dDh-fU-yhL"/>
                         <outlet property="boilingLabel" destination="YNo-bT-umF" id="6bh-dr-QIx"/>
+                        <outlet property="discoveryLabel" destination="dJq-gx-rZa" id="8sY-2N-SRt"/>
                         <outlet property="imageView" destination="VA4-6C-FS9" id="sDH-H2-Vm4"/>
                         <outlet property="massLabel" destination="OuO-OU-IhO" id="AcE-VY-8D8"/>
                         <outlet property="meltingLabel" destination="YGD-M3-cPt" id="aXL-ao-CLx"/>
@@ -192,4 +204,7 @@
             <point key="canvasLocation" x="137.68115942028987" y="73.660714285714278"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="hand.thumbsup" catalog="system" width="64" height="64"/>
+    </resources>
 </document>
