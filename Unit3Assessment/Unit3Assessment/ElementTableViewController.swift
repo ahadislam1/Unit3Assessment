@@ -50,12 +50,12 @@ class ElementTableViewController: UIViewController {
     }
     
     private func loadData() {
-        GenericCoderService.manager.getJSON(objectType: [Element].self, with: endpointURL) { result in
+        GenericCoderService.manager.getJSON(objectType: [Element].self, with: endpointURL) { [weak self] result in
             switch result {
             case .failure(let error):
                 print("Error decoding: \(error)")
             case .success(let elementsFromAPI):
-                self.elements = elementsFromAPI
+                self?.elements = elementsFromAPI
             }
         }
     }

@@ -52,20 +52,20 @@ class FavoritesTableViewController: UIViewController {
     }
     
     private func loadData() {
-        GenericCoderService.manager.getJSON(objectType: [Element].self, with: elementsURL) { (result) in
+        GenericCoderService.manager.getJSON(objectType: [Element].self, with: elementsURL) { [weak self] result in
             switch result {
             case .failure(let error):
                 print("Error occurred getting JSON: \(error)")
             case .success(let elementsFromAPI):
-                self.elements = elementsFromAPI
+                self?.elements = elementsFromAPI
             }
         }
-        GenericCoderService.manager.getJSON(objectType: [Favorite].self, with: favoritesURL) { (result) in
+        GenericCoderService.manager.getJSON(objectType: [Favorite].self, with: favoritesURL) { [weak self] result in
             switch result {
             case .failure(let error):
                 print("Error occurred getting JSON: \(error)")
             case .success(let favoritesFromAPI):
-                self.favorites = favoritesFromAPI
+                self?.favorites = favoritesFromAPI
             }
         }
     }
