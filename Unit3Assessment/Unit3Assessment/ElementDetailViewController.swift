@@ -23,7 +23,7 @@ class ElementDetailViewController: UIViewController {
     
     private let name = "Ahad"
     
-    private let endpointURL = "https://5df40792f9e7ae0014801788.mockapi.io/api/v1/favorites"
+    private let endpointURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites"
     
     private var favorites = [Favorite]() {
         didSet {

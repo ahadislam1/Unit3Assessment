@@ -8,20 +8,16 @@
 
 import UIKit
 
-// here we crate an extension on UIImageView to hand off getting a UIImage using
-// our URLSession wrapper class (NetworkHelper)
-
 @available(iOS 13.0, *)
 extension UIImageView {
   func getImage(with urlString: String,
                 completion: @escaping (Result<UIImage, AppError>) -> ()) {
     
-    // The UIActivityIndicatorView is used to indicate to the user that a download is in progress
     let activityIndicator = UIActivityIndicatorView(style: .large)
     activityIndicator.color = .systemTeal
-    activityIndicator.startAnimating() // it's hidden until we explicitly start animating
+    activityIndicator.startAnimating() //
     activityIndicator.center = center
-    addSubview(activityIndicator) // we add the indicattor as a subview of the image view
+    addSubview(activityIndicator) //
     
     guard let url = URL(string: urlString) else {
         completion(.failure(.badURL))

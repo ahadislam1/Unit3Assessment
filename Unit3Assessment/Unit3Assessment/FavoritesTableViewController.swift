@@ -13,7 +13,9 @@ class FavoritesTableViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     private let elementsURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/elements"
-    private let favoritesURL = "https://5df40792f9e7ae0014801788.mockapi.io/api/v1/favorites"
+    private let favoritesURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites"
+    
+    private let name = "Ahad"
     
     var elements = [Element]()
     var favorites = [Favorite]() {
@@ -31,12 +33,12 @@ class FavoritesTableViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadData()
         configureView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -60,12 +62,13 @@ class FavoritesTableViewController: UIViewController {
                 self?.elements = elementsFromAPI
             }
         }
+        
         GenericCoderService.manager.getJSON(objectType: [Favorite].self, with: favoritesURL) { [weak self] result in
             switch result {
             case .failure(let error):
                 print("Error occurred getting JSON: \(error)")
             case .success(let favoritesFromAPI):
-                self?.favorites = favoritesFromAPI
+                self?.favorites = favoritesFromAPI.filter {$0.favoritedBy == self!.name}
             }
         }
     }
