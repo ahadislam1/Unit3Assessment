@@ -33,12 +33,12 @@ class FavoritesTableViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadData()
         configureView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        loadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
