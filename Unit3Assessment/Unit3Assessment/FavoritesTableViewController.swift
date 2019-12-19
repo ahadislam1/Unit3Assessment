@@ -18,7 +18,13 @@ class FavoritesTableViewController: UIViewController {
     
     private let name = "Ahad"
     
-    var elements = [Element]()
+    var elements = [Element]() {
+        didSet{
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
     var favorites = [Favorite]() {
         didSet {
             DispatchQueue.main.async {
@@ -30,6 +36,7 @@ class FavoritesTableViewController: UIViewController {
     var filteredElements: [Element] {
         let favoriteElements = favorites.map {$0.name }
         return elements.filter { favoriteElements.contains($0.name)}
+            .sorted(by: {$0.number < $1.number})
     }
     
     override func viewDidLoad() {
@@ -41,6 +48,8 @@ class FavoritesTableViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateFavorites()
+        print(elements.count)
+        print(filteredElements.count)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -72,7 +81,7 @@ class FavoritesTableViewController: UIViewController {
             case .failure(let error):
                 print("Error occurred getting JSON from elements: \(error)")
             case .success(let elementsFromAPI):
-                self.elements = elementsFromAPI
+                self.elements += elementsFromAPI
             }
         }
         
@@ -81,7 +90,9 @@ class FavoritesTableViewController: UIViewController {
             case .failure(let error):
                 print("Error occured getting json from elements_remaining: \(error)")
             case .success(let elementsFromAPI):
-                self.elements.append(contentsOf: elementsFromAPI)
+                print("elements we get from the api: \(elementsFromAPI.count)")
+                self.elements += elementsFromAPI
+                print("elements after elementsFrom API :\(self.elements.count)")
             }
         }
         
@@ -106,7 +117,7 @@ extension FavoritesTableViewController: UITableViewDataSource {
         }
         let element = filteredElements[indexPath.row]
         let thumbnailURL = "https://www.theodoregray.com/periodictable/Tiles/\(element.elementNumberInString)/s7.JPG"
-
+        
         cell.nameLabel.text = element.name
         cell.infoLabel.text = "\(element.symbol)(\(element.name)) \(element.atomicMass)"
         cell.elementImageView.getImage(with: thumbnailURL) { (result) in
