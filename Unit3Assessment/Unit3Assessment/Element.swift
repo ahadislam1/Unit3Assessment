@@ -10,12 +10,20 @@ import Foundation
 
 struct Element: Codable {
     let name: String
+    let category: String
     let symbol: String
     let number: Int
+    let period: Int
+    let phase: String
+    let source: String
     let atomicMass: Double
+    let appearance: String?
+    let summary: String
+    let molarHeat: Double?
     let melt: Double?
     let boil: Double?
     let discoveredBy: String?
+    let density: Double?
     
     var elementNumberInString: String {
         return number / 100 == 0 ?
@@ -23,12 +31,11 @@ struct Element: Codable {
     }
     
     enum CodingKeys: String, CodingKey {
-        case name
-        case number
-        case symbol
+        case name, category, number, symbol, period, phase
+        case summary, appearance, density
         case atomicMass = "atomic_mass"
-        case melt
-        case boil
+        case melt, boil, source
         case discoveredBy = "discovered_by"
+        case molarHeat = "molar_heat"
     }
 }

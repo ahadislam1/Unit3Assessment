@@ -59,7 +59,7 @@ class Unit3AssessmentTests: XCTestCase {
                 XCTFail("Error occured getting JSON: \(error)")
             case .success(let favoritesFromAPI):
                 favorites = favoritesFromAPI
-                XCTAssertEqual(id, favorites[0].elementName, "it all went wrong")
+                XCTAssertEqual(id, favorites[0].name, "it all went wrong")
                 exp.fulfill()
             }
         }
@@ -147,5 +147,40 @@ class Unit3AssessmentTests: XCTestCase {
         let dumbURL = endURL + "/1"
         XCTAssertEqual(expURL, dumbURL)
     }
-
+    
+    func testEqualUrls() {
+        let otherURL = "http://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites"
+        let endURL = "https://5df40792f9e7ae0014801788.mockapi.io/api/v1/favorites"
+        
+        XCTAssertEqual(otherURL, endURL)
+    }
+    
+    func testNewPostJSON() {
+        let newURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites"
+        let favorite = Favorite(favoritedBy: "Ahad", elementName: "Carbon", elementSymbol: "C")
+        let exp = XCTestExpectation(description: "Succesfully posted object.")
+        GenericCoderService.manager.postJSON(object: favorite, with: newURL) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("\(error)")
+            case .success:
+                exp.fulfill()
+            }
+        }
+        wait(for: [exp], timeout: 20)
+    }
+    
+    func testNewDeleteJSON() {
+        let newURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites/9"
+        let exp = XCTestExpectation(description: "Succesfully deleted object.")
+        GenericCoderService.manager.deleteJSON(with: newURL) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("\(error)")
+            case .success:
+                exp.fulfill()
+            }
+        }
+        wait(for: [exp], timeout: 20)
+    }
 }

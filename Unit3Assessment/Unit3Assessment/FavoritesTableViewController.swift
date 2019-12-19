@@ -27,7 +27,7 @@ class FavoritesTableViewController: UIViewController {
     }
     
     var filteredElements: [Element] {
-        let favoriteElements = favorites.map {$0.elementName }
+        let favoriteElements = favorites.map {$0.name }
         return elements.filter { favoriteElements.contains($0.name)}
     }
     

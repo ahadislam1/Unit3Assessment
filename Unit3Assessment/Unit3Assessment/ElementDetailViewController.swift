@@ -38,7 +38,7 @@ class ElementDetailViewController: UIViewController {
     }
     
     private var isFavorited: Bool {
-        favorites.map{$0.elementName}.contains(element.name)
+        favorites.map{$0.name}.contains(element.name)
     }
     
     private var imageURL: String {
@@ -90,7 +90,7 @@ class ElementDetailViewController: UIViewController {
         case .done:
             sender.isEnabled = false
             if isFavorited {
-                let favorite = favorites.first { $0.elementName == element.name }
+                let favorite = favorites.first { $0.name == element.name }
                 if let favorite = favorite, let id = favorite.id {
                     GenericCoderService.manager.deleteJSON(with: endpointURL + "/\(id)") { (result) in
                         switch result {
@@ -109,7 +109,7 @@ class ElementDetailViewController: UIViewController {
             
         case .plain:
             sender.isEnabled = false
-            let favorite = Favorite(favoritedBy: name, elementName: element.name, elementSymbol: element.symbol)
+            let favorite = Favorite(id: nil, category: element.category, melt: element.melt, boil: element.boil, period: element.period, symbol: element.symbol, discoveredBy: element.discoveredBy, molarHeat: element.molarHeat, phase: element.phase, source: element.source, summary: element.summary, favoritedBy: name, number: element.number, appearance: element.appearance, density: element.density, atomicMass: element.atomicMass, name: element.name)
             GenericCoderService.manager.postJSON(object: favorite, with: endpointURL) { (result) in
                 switch result {
                 case .failure(let error):
