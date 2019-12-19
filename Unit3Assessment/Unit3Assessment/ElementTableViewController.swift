@@ -20,10 +20,9 @@ class ElementTableViewController: UIViewController {
             }
         }
     }
-    
-    var favoriteElements = Set<String>()
-    
+        
     private let endpointURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/elements"
+    private let endpoint2URL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/elements_remaining"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,8 +32,6 @@ class ElementTableViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("ViewWillAppear")
-        print(favoriteElements)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -53,9 +50,19 @@ class ElementTableViewController: UIViewController {
         GenericCoderService.manager.getJSON(objectType: [Element].self, with: endpointURL) { [weak self] result in
             switch result {
             case .failure(let error):
-                print("Error decoding: \(error)")
+                print("Error decoding from elements: \(error)")
             case .success(let elementsFromAPI):
                 self?.elements = elementsFromAPI
+            }
+        }
+        
+        GenericCoderService.manager.getJSON(objectType: [Element].self, with: endpoint2URL) { (result) in
+            switch result {
+            case .failure(let error):
+                print("Error decoding from elements_remaining: \(error)")
+            case .success(let elementsFromAPI):
+                print(elementsFromAPI.count)
+                self.elements.append(contentsOf: elementsFromAPI)
             }
         }
     }

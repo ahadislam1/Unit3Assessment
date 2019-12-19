@@ -67,19 +67,19 @@ class Unit3AssessmentTests: XCTestCase {
     }
     
     func testPostJSON() {
-        let postURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites"
-        let favorite = Favorite(favoritedBy: "ahad", elementName: "Hydrogen", elementSymbol: "H")
-        let exp = XCTestExpectation(description: "Successfully encoded project")
-        GenericCoderService.manager.postJSON(object: favorite, with: postURL) { (result) in
-            switch result {
-            case .failure(let error):
-                print("Error occured during encoding: \(error)")
-            case .success:
-                exp.fulfill()
-            }
-        }
-        
-        wait(for: [exp], timeout: 20)
+//        let postURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites"
+//        let favorite = Favorite(favoritedBy: "ahad", elementName: "Hydrogen", elementSymbol: "H")
+//        let exp = XCTestExpectation(description: "Successfully encoded project")
+//        GenericCoderService.manager.postJSON(object: favorite, with: postURL) { (result) in
+//            switch result {
+//            case .failure(let error):
+//                print("Error occured during encoding: \(error)")
+//            case .success:
+//                exp.fulfill()
+//            }
+//        }
+//
+//        wait(for: [exp], timeout: 20)
     }
     
     func testReduce() {
@@ -91,19 +91,19 @@ class Unit3AssessmentTests: XCTestCase {
     }
     
     func testAnActualPostJSON() {
-        let postURL = "https://5df40792f9e7ae0014801788.mockapi.io/api/v1/favorites"
-        let favorite = Favorite(favoritedBy: "Ahad", elementName: "Hydrogen", elementSymbol: "H")
-        let exp = XCTestExpectation(description: "Successfully posted project.")
-        GenericCoderService.manager.postJSON(object: favorite, with: postURL) { (result) in
-            switch result {
-            case .failure(let error):
-                debugPrint(error)
-            case .success:
-                exp.fulfill()
-            }
-        }
-        
-        wait(for: [exp], timeout: 20)
+//        let postURL = "https://5df40792f9e7ae0014801788.mockapi.io/api/v1/favorites"
+//        let favorite = Favorite(favoritedBy: "Ahad", elementName: "Hydrogen", elementSymbol: "H")
+//        let exp = XCTestExpectation(description: "Successfully posted project.")
+//        GenericCoderService.manager.postJSON(object: favorite, with: postURL) { (result) in
+//            switch result {
+//            case .failure(let error):
+//                debugPrint(error)
+//            case .success:
+//                exp.fulfill()
+//            }
+//        }
+//
+//        wait(for: [exp], timeout: 20)
     }
     
     func testDeleteJSON() {
@@ -156,22 +156,22 @@ class Unit3AssessmentTests: XCTestCase {
     }
     
     func testNewPostJSON() {
-        let newURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites"
-        let favorite = Favorite(favoritedBy: "Ahad", elementName: "Carbon", elementSymbol: "C")
-        let exp = XCTestExpectation(description: "Succesfully posted object.")
-        GenericCoderService.manager.postJSON(object: favorite, with: newURL) { result in
-            switch result {
-            case .failure(let error):
-                XCTFail("\(error)")
-            case .success:
-                exp.fulfill()
-            }
-        }
-        wait(for: [exp], timeout: 20)
+//        let newURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites"
+//        let favorite = Favorite(favoritedBy: "Ahad", elementName: "Carbon", elementSymbol: "C")
+//        let exp = XCTestExpectation(description: "Succesfully posted object.")
+//        GenericCoderService.manager.postJSON(object: favorite, with: newURL) { result in
+//            switch result {
+//            case .failure(let error):
+//                XCTFail("\(error)")
+//            case .success:
+//                exp.fulfill()
+//            }
+//        }
+//        wait(for: [exp], timeout: 20)
     }
     
     func testNewDeleteJSON() {
-        let newURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites/9"
+        let newURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites/13"
         let exp = XCTestExpectation(description: "Succesfully deleted object.")
         GenericCoderService.manager.deleteJSON(with: newURL) { result in
             switch result {
@@ -182,5 +182,21 @@ class Unit3AssessmentTests: XCTestCase {
             }
         }
         wait(for: [exp], timeout: 20)
+    }
+    
+    func testAnotherElementJSON() {
+        let newNEWURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/elements_remaining"
+        var elements = [Element]()
+        let exp = XCTestExpectation(description: "Succesfully decoded object.")
+        GenericCoderService.manager.getJSON(objectType: [Element].self, with: newNEWURL) { (result) in
+            switch result {
+            case .failure(let error):
+                XCTFail("\(error)")
+            case .success(let elementsFromAPI):
+                elements = elementsFromAPI
+                exp.fulfill()
+            }
+        }
+        wait(for: [exp], timeout: 5)
     }
 }

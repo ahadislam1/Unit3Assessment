@@ -10,21 +10,21 @@ import Foundation
 
 struct Favorite: Codable {
     let id: String?
-    let category: String
+    let category: String?
     let melt: Double?
     let boil: Double?
-    let period: Int
+    let period: Int?
     let symbol: String
     let discoveredBy: String?
     let molarHeat: Double?
-    let phase: String
-    let source: String
-    let summary: String
+    let phase: String?
+    let source: String?
+    let summary: String?
     let favoritedBy: String
     let number: Int
     let appearance: String?
     let density: Double?
-    let atomicMass: Double
+    let atomicMass: Double?
     let name: String
     
     enum CodingKeys: String, CodingKey {

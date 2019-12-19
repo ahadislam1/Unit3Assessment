@@ -64,6 +64,9 @@ class ElementDetailViewController: UIViewController {
             switch result {
             case .failure(let error):
                 print("Error getting image: \(error)")
+                DispatchQueue.main.async {
+                self.imageView.image = UIImage(systemName: "cloud.rain")
+                }
             case .success(let image):
                 DispatchQueue.main.async {
                     self.imageView.image = image
@@ -76,7 +79,7 @@ class ElementDetailViewController: UIViewController {
         GenericCoderService.manager.getJSON(objectType: [Favorite].self, with: endpointURL) { (result) in
             switch result {
             case .failure(let error):
-                print("Error getting JSON: \(error)")
+                print("Error getting JSON from favorites: \(error)")
             case .success(let favoritesFromAPI):
                 self.favorites = favoritesFromAPI.filter({$0.favoritedBy == self.name})
             }

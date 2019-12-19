@@ -13,6 +13,7 @@ class FavoritesTableViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     private let elementsURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/elements"
+    private let elements2URL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/elements_remaining"
     private let favoritesURL = "https://5c1d79abbc26950013fbcaa9.mockapi.io/api/v1/favorites"
     
     private let name = "Ahad"
@@ -33,12 +34,13 @@ class FavoritesTableViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadData()
         configureView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadData()
+        updateFavorites()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -53,24 +55,36 @@ class FavoritesTableViewController: UIViewController {
         tableView.dataSource = self
     }
     
-    private func loadData() {
-        GenericCoderService.manager.getJSON(objectType: [Element].self, with: elementsURL) { [weak self] result in
+    fileprivate func updateFavorites() {
+        GenericCoderService.manager.getJSON(objectType: [Favorite].self, with: favoritesURL) { result in
             switch result {
             case .failure(let error):
-                print("Error occurred getting JSON: \(error)")
+                print("Error occurred getting JSON from favorites: \(error)")
+            case .success(let favoritesFromAPI):
+                self.favorites = favoritesFromAPI.filter {$0.favoritedBy == self.name}
+            }
+        }
+    }
+    
+    private func loadData() {
+        GenericCoderService.manager.getJSON(objectType: [Element].self, with: elementsURL) { result in
+            switch result {
+            case .failure(let error):
+                print("Error occurred getting JSON from elements: \(error)")
             case .success(let elementsFromAPI):
-                self?.elements = elementsFromAPI
+                self.elements = elementsFromAPI
             }
         }
         
-        GenericCoderService.manager.getJSON(objectType: [Favorite].self, with: favoritesURL) { [weak self] result in
+        GenericCoderService.manager.getJSON(objectType: [Element].self, with: elements2URL) { result in
             switch result {
             case .failure(let error):
-                print("Error occurred getting JSON: \(error)")
-            case .success(let favoritesFromAPI):
-                self?.favorites = favoritesFromAPI.filter {$0.favoritedBy == self!.name}
+                print("Error occured getting json from elements_remaining: \(error)")
+            case .success(let elementsFromAPI):
+                self.elements.append(contentsOf: elementsFromAPI)
             }
         }
+        
     }
 }
 
